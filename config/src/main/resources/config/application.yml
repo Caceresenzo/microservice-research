@@ -1,0 +1,30 @@
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+        - info
+        - health
+  endpoint:
+    health:
+      show-details: always
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 2
+error:
+  handling:
+    add-path-to-error: true
+    exception-logging: with-stacktrace
+    full-stacktrace-http-statuses:
+    - 5xx
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    web:
+      servlet:
+        enabled: true

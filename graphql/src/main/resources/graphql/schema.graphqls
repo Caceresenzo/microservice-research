@@ -1,0 +1,36 @@
+scalar DateTime
+scalar UUID
+scalar JSON
+
+type Query {
+	users: [User]
+	articles: [Article]
+	postsByUserId(userId: UUID): [Post]
+	articlesByUserId(userId: UUID): [Article]
+}
+
+type User {
+    id: UUID!
+    name: String!
+    email: String!
+}
+
+type Post {
+    id: UUID!
+    content: String!
+	article: Article!
+    articleId: UUID!
+    user: User!
+    userId: UUID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type Article {
+    id: ID!
+    content: String!
+    user: User!
+    userId: ID!
+    tags: JSON!
+	posts: [Post]
+}

@@ -1,12 +1,10 @@
 package caceresenzo.hello.post;
 
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,9 +23,7 @@ public class PostRestController {
 	public PageResponse<Post> index(
 		@RequestParam(name = "article", required = false) UUID articleId,
 		@RequestParam(name = "user", required = false) UUID userId,
-		Pageable pageable,
-		@RequestHeader Map<String, String> headers) {
-		headers.entrySet().forEach(System.out::println);
+		Pageable pageable) {
 		if (articleId == null && userId == null) {
 			throw new MissingArticleAndUserParameterException();
 		}

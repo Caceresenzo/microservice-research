@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import caceresenzo.hello.common.PageResponse;
+import caceresenzo.hello.common.model.PageResponse;
 
 @FeignClient("user-service")
 public interface UserService {

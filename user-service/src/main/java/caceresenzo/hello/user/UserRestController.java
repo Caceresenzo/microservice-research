@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import caceresenzo.hello.common.PageResponse;
+import caceresenzo.hello.common.model.PageResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController

@@ -28,3 +28,9 @@ spring:
     web:
       servlet:
         enabled: true
+springdoc:
+  disable-i18n: true
+  api-docs:
+    path: /spec.json
+  swagger-ui:
+    use-root-path: true

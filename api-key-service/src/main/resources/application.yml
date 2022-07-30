@@ -11,21 +11,8 @@ spring:
       discovery:
         enabled: true
         service-id: config
-  data:
-    mongodb:
-      uuid-representation: standard
-      authentication-database: admin
-      database: api-key-service
-      username: root
-      password: password
 eureka:
   client:
     enabled: true
     service-url:
       default-zone: ${DISCOVERY_URL:http://localhost:8761}/eureka
-springdoc:
-  disable-i18n: true
-  api-docs:
-    path: /spec.json
-  swagger-ui:
-    use-root-path: true

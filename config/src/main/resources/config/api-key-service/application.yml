@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      uuid-representation: standard
+      authentication-database: admin
+      database: api-key-service
+      username: root
+      password: password

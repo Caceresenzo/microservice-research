@@ -4,11 +4,10 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import caceresenzo.hello.gateway.api.auth.AuthenticationServiceConfiguration;
-import caceresenzo.hello.gateway.filter.AuthGatewayFilter;
+import caceresenzo.hello.gateway.filter.AuthenticationWebFilter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -16,17 +15,16 @@ import lombok.RequiredArgsConstructor;
 public class RoutesConfiguration {
 	
 	@Bean
-	@Lazy
-	AuthGatewayFilter authGatewayFilterFactory(WebClient.Builder webClientBuilder, AuthenticationServiceConfiguration serviceConfiguration) {
+	AuthenticationWebFilter authenticationWebFilter(WebClient.Builder webClientBuilder, AuthenticationServiceConfiguration serviceConfiguration) {
 		WebClient webClient = webClientBuilder
 			.baseUrl(serviceConfiguration.getBaseUrl())
 			.build();
 		
-		return new AuthGatewayFilter(serviceConfiguration.getAuthenticateEndpoint(), webClient);
+		return new AuthenticationWebFilter(serviceConfiguration.getAuthenticateEndpoint(), webClient);
 	}
 	
 	@Bean
-	RouteLocator routes(RouteLocatorBuilder builder, AuthGatewayFilter authGatewayFilter) {
+	RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder.routes()
 			.route(route -> route
 				.path("/")

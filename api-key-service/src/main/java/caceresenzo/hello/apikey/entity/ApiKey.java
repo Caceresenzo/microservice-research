@@ -1,4 +1,4 @@
-package caceresenzo.hello.apikey;
+package caceresenzo.hello.apikey.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Document(collection = "api_keys")
 @Data
 @Accessors(chain = true)
-public class APIKey {
+public class ApiKey {
 	
 	@Id
 	private UUID id;

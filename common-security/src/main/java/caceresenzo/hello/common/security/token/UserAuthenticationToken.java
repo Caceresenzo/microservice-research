@@ -1,4 +1,4 @@
-package caceresenzo.hello.common.security;
+package caceresenzo.hello.common.security.token;
 
 import java.util.Collection;
 import java.util.Objects;

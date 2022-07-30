@@ -28,8 +28,6 @@ public class RawApiKeyAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		String plain = extractApiKey(request);
 		
-		System.out.println("RawApiKeyAuthenticationFilter.doFilterInternal()");
-		
 		if (plain != null) {
 			Optional<ApiKeyDto> apiKey = service.findByPlain(plain);
 			

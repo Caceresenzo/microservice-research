@@ -6,6 +6,8 @@ spring:
   cloud:
     config:
       enabled: false
+  main:
+    web-application-type: reactive
 eureka:
   client:
     register-with-eureka: false

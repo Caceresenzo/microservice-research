@@ -3,8 +3,8 @@ server:
 spring:
   application:
     name: api-key-service
-#  config:
-#    import: configserver:http://config
+  config:
+    import: configserver:http://config
   cloud:
     config:
       fail-fast: true

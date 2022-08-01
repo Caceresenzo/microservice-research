@@ -7,11 +7,15 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "nuxt": "3.0.0-rc.6",
+    "nuxt": "^3.0.0-rc.6",
     "sass": "^1.54.0"
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",
-    "vuetify": "^3.0.0-beta.5"
+    "@nuxtjs-alt/auth": "^1.2.11",
+    "@nuxtjs-alt/axios": "^1.0.15",
+    "@pinia/nuxt": "^0.3.1",
+    "pinia": "^2.0.17",
+    "vuetify": "^3.0.0-beta.6"
   }
 }

@@ -33,6 +33,9 @@ public class RoutesConfiguration {
 				.path("/graphql", "/graphiql")
 				.uri("lb://graphql"))
 			.route(route -> route
+				.path("/v1/authenticate", "/v1/authenticate/*")
+				.uri("lb://auth-service"))
+			.route(route -> route
 				.path("/v1/api-keys", "/v1/api-keys/*")
 				.uri("lb://api-key-service"))
 			.route(route -> route

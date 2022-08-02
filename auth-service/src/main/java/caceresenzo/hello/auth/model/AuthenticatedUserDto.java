@@ -1,7 +1,10 @@
 package caceresenzo.hello.auth.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.security.core.GrantedAuthority;
 
 import caceresenzo.hello.auth.api.apikey.ApiKeyDto;
 import lombok.AllArgsConstructor;
@@ -16,6 +19,10 @@ public class AuthenticatedUserDto {
 	
 	public AuthenticatedUserDto(ApiKeyDto apiKey) {
 		this(apiKey.getUserId(), apiKey.getScopes());
+	}
+	
+	public static AuthenticatedUserDto fromGrantedAuthorities(UUID userId, Collection<GrantedAuthority> authorities) {
+		return new AuthenticatedUserDto(userId, authorities.stream().map(GrantedAuthority::getAuthority).toList());
 	}
 	
 }

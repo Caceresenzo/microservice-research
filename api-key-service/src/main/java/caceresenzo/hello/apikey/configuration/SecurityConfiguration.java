@@ -23,6 +23,13 @@ public class SecurityConfiguration extends BaseApplicationSecurity {
 	protected void configure(HttpSecurity http) throws Exception {
 		super.configure(http);
 		
+		http.authorizeHttpRequests().anyRequest().authenticated();
+	}
+	
+	@Override
+	protected void configureFilters(HttpSecurity http) {
+		super.configureFilters(http);
+		
 		http.addFilterBefore(new RawApiKeyAuthenticationFilter(service), HeaderAuthenticationFilter.class);
 	}
 	

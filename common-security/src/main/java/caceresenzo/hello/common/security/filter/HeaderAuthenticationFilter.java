@@ -1,7 +1,6 @@
 package caceresenzo.hello.common.security.filter;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,14 +31,6 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-		for (String name : new Iterable<String>() {
-			@Override
-			public Iterator<String> iterator() {
-				return request.getHeaderNames().asIterator();
-			}
-		}) {
-			System.out.println(name);
-		}
 		Authentication authentication = extractAuthentication(request);
 		
 		if (authentication != null) {
@@ -47,6 +38,11 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
 		}
 		
 		filterChain.doFilter(request, response);
+	}
+	
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+		return SecurityContextHolder.getContext().getAuthentication() != null;
 	}
 	
 	public static AuthenticationType extractAuthenticationType(HttpServletRequest request) {
@@ -86,7 +82,6 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
 	
 	public static Authentication extractAuthentication(HttpServletRequest request) {
 		AuthenticationType type = AuthenticationType.parse(request.getHeader(AUTHENTICATION_TYPE_HEADER));
-		System.out.println("request.getHeader(AUTHENTICATION_TYPE_HEADER): " + request.getHeader(AUTHENTICATION_TYPE_HEADER));
 		if (type == null) {
 			return null;
 		}

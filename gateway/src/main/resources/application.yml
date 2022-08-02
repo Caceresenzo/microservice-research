@@ -6,6 +6,11 @@ spring:
   cloud:
     config:
       enabled: false
+#    gateway:
+#      httpclient:
+#        wiretap: true
+#      httpserver:
+#        wiretap: true
   main:
     web-application-type: reactive
 eureka:
@@ -15,3 +20,11 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 1
     lease-expiration-duration-in-seconds: 2
+#logging:
+#  level:
+#    reactor:
+#      netty: TRACE
+#    org:
+#      springframework:
+#        cloud:
+#          gateway: TRACE

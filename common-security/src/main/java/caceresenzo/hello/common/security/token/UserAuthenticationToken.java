@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import lombok.Getter;
 
@@ -32,6 +33,10 @@ public class UserAuthenticationToken extends AbstractAuthenticationToken {
 	@Override
 	public Object getPrincipal() {
 		return String.format("user/%s", userId);
+	}
+	
+	public static UserAuthenticationToken fromStrings(UUID userId, Collection<String> authorities) {
+		return new UserAuthenticationToken(userId, authorities.stream().map(SimpleGrantedAuthority::new).toList());
 	}
 	
 }

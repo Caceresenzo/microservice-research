@@ -1,6 +1,5 @@
 package caceresenzo.hello.gateway.filter;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -28,17 +27,17 @@ public class AuthenticationWebFilter implements WebFilter {
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
 		return extractAuthorization(exchange)
-			.map((authorization) -> webClient.get()
+			.flatMap((authorization) -> webClient.get()
 				.uri(authenticateEndpoint)
 				.header(AUTHORIZATION_HEADER, authorization)
-				.exchangeToMono(this::handleResponse)
-				.map((authenticatedUser) -> applyHeaders(exchange, authenticatedUser)))
-			.orElseGet(() -> Mono.just(removeHeaders(exchange)))
+				.exchangeToMono(this::handleResponse))
+			.map((authenticatedUser) -> applyHeaders(exchange, authenticatedUser))
+			.switchIfEmpty(Mono.defer(() -> Mono.just(exchange)))
 			.flatMap(chain::filter);
 	}
 	
-	public Optional<String> extractAuthorization(ServerWebExchange exchange) {
-		return Optional.ofNullable(exchange.getRequest().getHeaders().getFirst(AUTHORIZATION_HEADER));
+	public Mono<String> extractAuthorization(ServerWebExchange exchange) {
+		return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(AUTHORIZATION_HEADER));
 	}
 	
 	public Mono<AuthenticatedUserDto> handleResponse(ClientResponse response) {

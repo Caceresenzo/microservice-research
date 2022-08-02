@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   buildModules: [
+    '@nuxtjs-alt/proxy',
     "@nuxtjs-alt/auth",
     "@nuxtjs-alt/axios",
     '@pinia/nuxt',
@@ -88,5 +89,12 @@ export default defineNuxtConfig({
         acrValues: "0",
       },
     }
+  },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8000/',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, '')
+    },
   }
 })

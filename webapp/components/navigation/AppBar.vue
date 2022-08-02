@@ -5,7 +5,10 @@
         </v-app-bar-title>
         <v-spacer />
         <AccountMenu v-if="loggedIn" />
-        <AuthButtonLogin v-else />
+        <template v-else>
+            <AuthButtonRegister class="mr-2" />
+            <AuthButtonLogin />
+        </template>
     </v-app-bar>
 </template>
 

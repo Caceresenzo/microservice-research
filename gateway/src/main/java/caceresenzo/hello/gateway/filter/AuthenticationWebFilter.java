@@ -2,6 +2,7 @@ package caceresenzo.hello.gateway.filter;
 
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
@@ -33,6 +34,7 @@ public class AuthenticationWebFilter implements WebFilter {
 				.exchangeToMono(this::handleResponse))
 			.map((authenticatedUser) -> applyHeaders(exchange, authenticatedUser))
 			.switchIfEmpty(Mono.defer(() -> Mono.just(exchange)))
+			.map(AuthenticationWebFilter::removeOtherHeaders)
 			.flatMap(chain::filter);
 	}
 	
@@ -63,6 +65,16 @@ public class AuthenticationWebFilter implements WebFilter {
 				headers.remove(AUTHENTICATION_TYPE_HEADER);
 				headers.remove(USER_ID_HEADER);
 				headers.remove(USER_AUTHORITIES_HEADER);
+			}))
+			.build();
+	}
+	
+	public static ServerWebExchange removeOtherHeaders(ServerWebExchange exchange) {
+		return exchange.mutate()
+			.request((request) -> request.headers((headers) -> {
+				headers.remove(HttpHeaders.COOKIE);
+				headers.remove(HttpHeaders.SET_COOKIE);
+				headers.remove(HttpHeaders.AUTHORIZATION);
 			}))
 			.build();
 	}

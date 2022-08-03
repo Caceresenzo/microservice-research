@@ -1,0 +1,127 @@
+version: '3.9'
+services:
+   zipkin:
+      image: openzipkin/zipkin
+      restart: always
+      ports:
+      - 9411:9411
+   rabbitmq:
+      image: rabbitmq:3-management
+      restart: always
+      ports:
+      - 15672:15672
+      expose:
+      - 5672:5672
+   mongo:
+      image: mongo
+      ports:
+      - 27017:27017
+      restart: always
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: root
+         MONGO_INITDB_ROOT_PASSWORD: password
+   eureka:
+      image: eureka:0.0.1-SNAPSHOT
+      restart: always
+      ports:
+      - 8761:8761
+   config:
+      image: config:0.0.1-SNAPSHOT
+      expose:
+      - 8001:8001
+      depends_on:
+      - eureka
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761
+   gateway:
+      image: gateway:0.0.1-SNAPSHOT
+      ports:
+      - 8000:8000
+      depends_on:
+      - eureka
+      - config
+      - zipkin
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761
+   index:
+      image: index:0.0.1-SNAPSHOT
+      expose:
+      - 8002:8002
+      depends_on:
+      - eureka
+      - config
+      - zipkin
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761
+   graphql:
+      image: graphql:0.0.1-SNAPSHOT
+      expose:
+      - 8006:8006
+      depends_on:
+      - eureka
+      - config
+      - zipkin
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761
+   auth-service:
+      image: auth-service:0.0.1-SNAPSHOT
+      expose:
+      - 8010:8010
+      depends_on:
+      - eureka
+      - config
+      - zipkin
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761
+   api-key-service:
+      image: api-key-service:0.0.1-SNAPSHOT
+      expose:
+      - 8009:8009
+      depends_on:
+      - eureka
+      - config
+      - zipkin
+      - mongo
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761
+   user-service:
+      image: user-service:0.0.1-SNAPSHOT
+      expose:
+      - 8003:8003
+      depends_on:
+      - eureka
+      - config
+      - zipkin
+      - rabbitmq
+      - mongo
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761
+   analytics-service:
+      image: analytics-service:0.0.1-SNAPSHOT
+      depends_on:
+      - eureka
+      - config
+      - zipkin
+      - rabbitmq
+      - mongo
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761
+   tracking-service:
+      image: tracking-service:0.0.1-SNAPSHOT
+      depends_on:
+      - eureka
+      - config
+      - zipkin
+      - rabbitmq
+      - mongo
+      restart: always
+      environment:
+         DISCOVERY_URL: http://eureka:8761

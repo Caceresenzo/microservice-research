@@ -1,2 +1,6 @@
 info:
   config: user-service
+spring:
+  data:
+    mongodb:
+      database: user-service

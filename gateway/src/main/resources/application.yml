@@ -4,22 +4,57 @@ spring:
   application:
     name: gateway
   config:
-    import: configserver:http://config
-  cloud:
-    config:
-      fail-fast: true
-      discovery:
-        enabled: true
-        service-id: config
+    import: "consul:"
   main:
     web-application-type: reactive
-eureka:
-  client:
-    enabled: true
-    service-url:
-      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka
-    register-with-eureka: false
-    registry-fetch-interval-seconds: 1
-  instance:
-    lease-renewal-interval-in-seconds: 1
-    lease-expiration-duration-in-seconds: 2
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      config:
+        enabled: true
+      discovery:
+        instance-id: ${spring.application.name}-${server.port}-${random.uuid}
+    gateway:
+      default-filters:
+      - name: Retry
+        args:
+          retries: 3
+          series: # empty
+          methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+          exceptions:
+          - java.net.ConnectException
+      routes:
+        - id: index
+          uri: lb://index
+          predicates:
+            - Path=/
+        - id: graphql
+          uri: lb://graphql
+          predicates:
+            - Path=/graphql, /graphiql
+        - id: api-keys-service
+          uri: lb://api-key-service
+          predicates:
+            - Path=/v1/api-keys, /v1/api-keys/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/v1/users, /v1/users/**
+        - id: article-service
+          uri: lb://article-service
+          predicates:
+            - Path=/v1/articles, /v1/articles/**
+        - id: article-service
+          uri: lb://post-service
+          predicates:
+            - Path=/v1/posts, /v1/posts/**

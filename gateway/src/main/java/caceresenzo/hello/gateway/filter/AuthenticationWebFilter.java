@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AuthenticationWebFilter implements WebFilter {
 	
-	public static final String AUTHORIZATION_HEADER = "Authorization";
 	public static final String AUTHENTICATION_TYPE_HEADER = "X-Authentication-Type";
 	public static final String USER_ID_HEADER = "X-User-ID";
 	public static final String USER_AUTHORITIES_HEADER = "X-Authorities";
@@ -30,7 +29,7 @@ public class AuthenticationWebFilter implements WebFilter {
 		return extractAuthorization(exchange)
 			.flatMap((authorization) -> webClient.get()
 				.uri(authenticateEndpoint)
-				.header(AUTHORIZATION_HEADER, authorization)
+				.header(HttpHeaders.AUTHORIZATION, authorization)
 				.exchangeToMono(this::handleResponse))
 			.map((authenticatedUser) -> applyHeaders(exchange, authenticatedUser))
 			.switchIfEmpty(Mono.defer(() -> Mono.just(exchange)))
@@ -39,7 +38,7 @@ public class AuthenticationWebFilter implements WebFilter {
 	}
 	
 	public Mono<String> extractAuthorization(ServerWebExchange exchange) {
-		return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(AUTHORIZATION_HEADER));
+		return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION));
 	}
 	
 	public Mono<AuthenticatedUserDto> handleResponse(ClientResponse response) {

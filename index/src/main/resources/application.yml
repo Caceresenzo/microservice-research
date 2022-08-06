@@ -4,22 +4,16 @@ spring:
   application:
     name: index
   config:
-    import: configserver:http://config
+    import: "consul:"
   cloud:
-    discovery:
-      enabled: true
-    config:
-      fail-fast: true
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      config:
+        enabled: true
+        format: YAML
       discovery:
         enabled: true
-        service-id: config
-info:
-  application:
-    name: ${spring.application.name}
-    maintainer: Enzo
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        instance-id: ${spring.application.name}-${server.port}-${random.uuid}

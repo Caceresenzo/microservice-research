@@ -14,7 +14,7 @@ public class IndexController {
 	
 	@GetMapping
 	public ResponseEntity<String> index() {
-		return ResponseEntity.ok("Hello World from port: " + server.getWebServer().getPort());
+		return ResponseEntity.ok("Hello World from port: " + server.getWebServer().getPort() + " (ID: " + IndexApplication.ID + ")");
 	}
 	
 }

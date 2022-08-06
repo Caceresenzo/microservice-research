@@ -1,34 +1,25 @@
-feign:
-  client:
-    config:
-      article-service:
-        loggerLevel: full
-logging:
-  level:
-    '[caceresenzo.hello.graphql.api.article.ArticleService]': DEBUG
 server:
   port: ${PORT:8006}
 spring:
   application:
     name: graphql
   config:
-    import: configserver:http://config
+    import: "consul:"
   cloud:
-    config:
-      fail-fast: true
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      config:
+        enabled: true
+        format: YAML
       discovery:
         enabled: true
-        service-id: config
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        instance-id: ${spring.application.name}-${server.port}-${random.uuid}
   graphql:
     graphiql:
       enabled: true
-  zipkin:
-    base-url: http://zipkin
-eureka:
-  client:
-    enabled: true
-    service-url:
-      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka
 graphiql:
   cdn:
     enabled: true

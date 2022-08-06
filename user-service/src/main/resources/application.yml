@@ -4,15 +4,16 @@ spring:
   application:
     name: user-service
   config:
-    import: configserver:http://config
+    import: "consul:"
   cloud:
-    config:
-      fail-fast: true
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      config:
+        enabled: true
+        format: YAML
       discovery:
         enabled: true
-        service-id: config
-eureka:
-  client:
-    enabled: true
-    service-url:
-      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        instance-id: ${spring.application.name}-${server.port}-${random.uuid}

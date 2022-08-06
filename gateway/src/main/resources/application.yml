@@ -16,7 +16,11 @@ spring:
       port: ${CONSUL_PORT:8500}
       config:
         enabled: true
+        format: YAML
       discovery:
+        enabled: true
+        prefer-ip-address: true
+        health-check-path: /actuator/health
         instance-id: ${spring.application.name}-${server.port}-${random.uuid}
     gateway:
       default-filters:

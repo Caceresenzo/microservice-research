@@ -1,0 +1,35 @@
+global:
+  name: consul
+server:
+  replicas: 1
+  resources:
+    requests:
+      memory: '2Gi'
+      cpu: '1'
+      disk: '2Gi'
+    limits:
+      memory: '3Gi'
+      cpu: '1'
+      disk: '4Gi'
+# Configure Consul clients in this section
+client:
+  # Specify the resources that clients request for deployment.
+  resources:
+    requests:
+      memory: '1Gi'
+      cpu: '1'
+      disk: '1Gi'
+    limits:
+      memory: '1Gi'
+      cpu: '2'
+      disk: '3Gi'
+# Enable and configure the Consul UI.
+ui:
+  enabled: true
+# Enable Consul connect pod injection
+connectInject:
+  enabled: true
+  default: true
+controller:
+  enabled: true
+
